@@ -11,6 +11,7 @@ import com.danny.springe_com.repository.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,21 @@ public class OrderService {
 
             product.setStockQuantity(product.getStockQuantity() - itemReq.quantity());
             productRepo.save(product);
+
+            OrderItem orderItem = OrderItem.builder()
+                    .product(product)
+                    .quantity(itemReq.quantity())
+                    .totalPrice(product.getPrice().multiply(BigDecimal.valueOf(itemReq.quantity())))
+                    .order(order)
+                    .build();
+
+            orderItems.add(orderItem);
         }
+
+        order.setOrderItems(orderItems);
+        Order savedOrder = orderRepo.save(order);
+
+
         return null;
     }
 }
