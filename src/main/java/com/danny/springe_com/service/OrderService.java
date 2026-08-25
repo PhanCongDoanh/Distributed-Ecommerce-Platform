@@ -56,7 +56,14 @@ public class OrderService {
         order.setOrderItems(orderItems);
         Order savedOrder = orderRepo.save(order);
 
-
+        OrderResponse orderResponse = new OrderResponse(
+                savedOrder.getOrderId(),
+                savedOrder.getCustomerName(),
+                savedOrder.getEmail(),
+                savedOrder.getStatus(),
+                savedOrder.getOrderDate(),
+                savedOrder.getOrderItems()
+        )
         return null;
     }
 }
