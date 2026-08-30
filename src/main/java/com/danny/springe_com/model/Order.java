@@ -14,7 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 public class Order {
     @Id
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(unique = true)
     private String orderId;

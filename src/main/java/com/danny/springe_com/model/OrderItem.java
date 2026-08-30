@@ -1,9 +1,6 @@
 package com.danny.springe_com.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,9 +15,11 @@ import java.math.BigDecimal;
 @Builder
 public class OrderItem {
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
     private Product product;
 
     private int quantity;
@@ -28,5 +27,6 @@ public class OrderItem {
     private BigDecimal totalPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
     private Order order;
 }
