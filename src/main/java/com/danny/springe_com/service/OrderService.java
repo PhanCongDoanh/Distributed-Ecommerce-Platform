@@ -4,6 +4,7 @@ import com.danny.springe_com.model.Order;
 import com.danny.springe_com.model.OrderItem;
 import com.danny.springe_com.model.Product;
 import com.danny.springe_com.model.dto.OrderItemRequest;
+import com.danny.springe_com.model.dto.OrderItemResponse;
 import com.danny.springe_com.model.dto.OrderRequest;
 import com.danny.springe_com.model.dto.OrderResponse;
 import com.danny.springe_com.repository.OrderRepo;
@@ -56,14 +57,25 @@ public class OrderService {
         order.setOrderItems(orderItems);
         Order savedOrder = orderRepo.save(order);
 
+        List<OrderItemResponse> itemResponses = new ArrayList<>();
+        for(OrderItem item : order.getOrderItems()){
+            OrderItemResponse orderItemResponse = new OrderItemResponse(
+                    item.getProduct().getName(),
+                    item.getQuantity(),
+                    item.getTotalPrice()
+            );
+
+            itemResponses.add(orderItemResponse);
+        }
+
         OrderResponse orderResponse = new OrderResponse(
                 savedOrder.getOrderId(),
                 savedOrder.getCustomerName(),
                 savedOrder.getEmail(),
                 savedOrder.getStatus(),
                 savedOrder.getOrderDate(),
-                savedOrder.getOrderItems()
-        )
-        return null;
+                itemResponses
+        );
+        return orderResponse;
     }
 }
