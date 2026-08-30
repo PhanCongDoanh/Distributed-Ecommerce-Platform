@@ -41,7 +41,12 @@ public class OrderService {
             Product product = productRepo.findById(itemReq.productId())
                     .orElseThrow(() -> new RuntimeException("Product not found"));
 
-            product.setStockQuantity(product.getStockQuantity() - itemReq.quantity());
+            if(product.getStockQuantity() < itemReq.quantity()){
+                throw new RuntimeException("Insufficient Stock");
+            }
+            product.setStockQuantity(
+                    product.getStockQuantity() - itemReq.quantity()
+            );
             productRepo.save(product);
 
             OrderItem orderItem = OrderItem.builder()
