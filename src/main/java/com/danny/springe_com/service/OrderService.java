@@ -9,6 +9,7 @@ import com.danny.springe_com.model.dto.OrderRequest;
 import com.danny.springe_com.model.dto.OrderResponse;
 import com.danny.springe_com.repository.OrderRepo;
 import com.danny.springe_com.repository.ProductRepo;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
