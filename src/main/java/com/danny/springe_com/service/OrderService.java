@@ -10,6 +10,7 @@ import com.danny.springe_com.model.dto.OrderResponse;
 import com.danny.springe_com.repository.OrderRepo;
 import com.danny.springe_com.repository.ProductRepo;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +21,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class OrderService {
 
-    @Autowired
-    private ProductRepo productRepo;
-    @Autowired
-    private OrderRepo orderRepo;
+    private final ProductRepo productRepo;
+    private final OrderRepo orderRepo;
 
     public OrderResponse placeOrder(OrderRequest request) {
         Order order = new Order();
@@ -39,7 +39,7 @@ public class OrderService {
         List<OrderItem> orderItems = new ArrayList<>();
 
         for(OrderItemRequest itemReq : request.items()){
-            Product product = productRepo.findById(itemReq.productId())
+            Product product = productRepo.findByIdWithLock(itemReq.productId())
                     .orElseThrow(() -> new RuntimeException("Product not found"));
 
             if(product.getStockQuantity() < itemReq.quantity()){
